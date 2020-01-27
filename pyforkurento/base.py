@@ -1,5 +1,5 @@
-from pyforkurento.parse_payloads import rpc_payload
-from pyforkurento.exceptions import KurentoOperationException
+from .parse_payloads import rpc_payload
+from .exceptions import KurentoOperationException
 
 import json
 import threading
