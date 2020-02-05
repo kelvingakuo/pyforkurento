@@ -7,7 +7,7 @@ import time
 import websocket
 
 from queue import Queue
-from random import expovariate, randint
+from random import randint
 
 class BaseKurentoClient(object):
     """ Base Kurento client

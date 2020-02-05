@@ -8,6 +8,9 @@ class KurentoClient(BaseKurentoClient):
     def __init__(self, kurento_server_url):
         super().__init__(kurento_server_url)
 
+    def __del__(self):
+        super().__del__()
+
     # A hacky decorator for dealing with failed operations due to badly designed multithreading in the base class
     def _validate_response(func):
         def wrapper(self, params):
@@ -21,8 +24,11 @@ class KurentoClient(BaseKurentoClient):
                             return ret
                         else:
                             load = ret["payload"]
-                            err = f"Kurento Server responded with the error code-> {load['code']}, an error of type-> {load['data']['type']}, with the message-> {load['message']}"
-                            raise KurentoOperationException(err)
+                            if(load["code"] == 40208): # SDP_ENDPOINT_ALREADY_NEGOTIATED ERROR
+                                return {"payload": {"value": "error"}}
+                            else:
+                                err = f"Kurento Server responded with the error code-> {load['code']}, an error of type-> {load['data']['type']}, with the message-> {load['message']}"
+                                raise KurentoOperationException(err)
         return wrapper
 
     @_validate_response    
