@@ -1,14 +1,21 @@
-from setuptools import setup
+import setuptools
 
-setup(name="pyforkurento",
-      version="0.0.1",
-      description="A Python client for Kurento Media Server",
-      url="https://github.com/kelvingakuo/pyforkurento",
-      author="Kelvin Gakuo Karanja",
-      author_email="kelvingakuo@gmail.com",
-      license="MIT",
-      packages=["pyforkurento"],
-      install_requires=[
-        "websocket-client>=0.57.0"
-      ],
-      zip_safe=False)
+with open("README.md", "r") as fh:
+    long_description  =  fh.read()
+
+setuptools.setup(
+    name = "pyforkurento",
+    version = "0.0.2",
+    description = "A Python client for Kurento Media Server",
+    long_description = long_description,
+    long_description_content_type = "text/markdown",
+    url = "https://github.com/kelvingakuo/pyforkurento",
+    author = "Kelvin Gakuo",
+    author_email = "kelvingakuo@gmail.com",
+    license = "MIT",
+    packages = setuptools.find_packages(),
+    install_requires = [
+      "websocket-client>=0.57.0"
+    ],
+    zip_safe = False
+)
