@@ -9,6 +9,19 @@ A python client for Kurento Media Streamer
 sudo docker run --name kms -d -p 8888:8888 kurento/kurento-media-server
 ```
 
+To develop custom filters;
+```bash
+sudo apt-get update && sudo apt-get install --yes kurento-media-server-dev
+```
+
+If you get the error: *Unable to locate package kurento-media-server-dev* try:
+1. Paste this link (https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/Kurento/kurento-media-server/tree/master/scaffold) to your browser
+2. Extract the downloaded folder to a location of choice
+3. ```cd``` into that folder then test using:
+```bash
+sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filter
+```
+
 **DO NOT USE THIS SDK IN ANY FORM OF A PRODUCTION ENVIRONMENT**
 
 The implementation of this SDK was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
