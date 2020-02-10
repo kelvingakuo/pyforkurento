@@ -4,15 +4,6 @@ class Endpoint(MediaElement):
     def __init__(self, sess_id, point_id, pipeline_class):
         super().__init__(sess_id, point_id, pipeline_class)
 
-    def connect(self, sink_elem = None):
-        if(sink_elem is not None):
-            sink = sink_elem.elem_id
-        else:
-            sink = None
-
-        return super().connect(sink)
-
-
 # =============== ENDPOINTS =====================
 class PlayerEndpoint(Endpoint):
     def __init__(self, session_id, elem_id, pipeline_class):

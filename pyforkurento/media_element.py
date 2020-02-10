@@ -9,7 +9,7 @@ class MediaElement(object):
 
     def connect(self, external_sink = None):
         if(external_sink is not None):
-            sink_id = external_sink
+            sink_id = external_sink.elem_id
         else:
             sink_id = self.elem_id
 

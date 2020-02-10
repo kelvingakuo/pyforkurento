@@ -4,15 +4,6 @@ class Filter(MediaElement):
     def __init__(self, sess_id, filter_id, pipeline_class):
         super().__init__(sess_id, filter_id, pipeline_class)
 
-    def connect(self, sink_elem = None):
-        if(sink_elem is not None):
-            sink = sink_elem.elem_id
-        else:
-            sink = None
-
-        return super().connect(sink)
-
-
 
 # =============== ENDPOINTS =====================
 class FaceOverlayFilter(Filter):
@@ -136,7 +127,7 @@ class ZBarFilter(Filter):
         return f"ZBarFilter ID: {self.elem_id} Session ID: {self.session_id}\n"
 
     def code_found_event(self, callback):
-        """ Triggered when a BarCode is found in the video stream
+        """ Triggered when a BarCode or QR code is found in the video stream
         Params:
             - callback : A Function to be called when a barcode is found
         """
