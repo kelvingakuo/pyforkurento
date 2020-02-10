@@ -54,7 +54,7 @@ class KurentoClient(BaseKurentoClient):
     def unsubscribe(self, params):
         return super().unsubscribe(params)
 
-    def ping():
+    def ping(self):
         return super().ping()
 
     def create_media_pipeline(self):

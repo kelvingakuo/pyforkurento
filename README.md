@@ -21,6 +21,10 @@ https://github.com/Kurento/doc-fiware-readthedocs/blob/master/apib/stream_orient
 *This changelog follows a loose version of semantic versioning*
 ### 0.0.2 5th Feb 2020
 **Fixed**
+* Class method parameters error
+
+### 0.0.2 5th Feb 2020
+**Fixed**
 * Import error
 
 ### 0.0.1 5th Feb 2020
