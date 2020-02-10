@@ -8,6 +8,7 @@ from .endpoints import RecorderEndpoint
 from .filters import FaceOverlayFilter
 from .filters import ZBarFilter
 from .filters import GStreamerFilter
+from .filters import ImageOverlayFilter
 
 from .hubs import Composite
 from .hubs import Dispatcher
@@ -101,6 +102,7 @@ class MediaPipeline(object):
                 * FaceOverlayFilter
                 * ZBarFilter
                 * GStreamerFilter
+                * ImageOverlayFilter
 
         Returns:
             - Object of the requested filter
@@ -116,6 +118,10 @@ class MediaPipeline(object):
         elif(filter == "GStreamerFilter"):
             self.elem_params["type"] = "GStreamerFilter"
             return self.__create_element(GStreamerFilter)
+
+        elif(filter == "ImageOverlayFilter"):
+            self.elem_params["type"] = "ImageOverlayFilter"
+            return self.__create_element(ImageOverlayFilter)
 
         else:
             raise KurentoOperationException(f"Unknown filter {filter} requested")

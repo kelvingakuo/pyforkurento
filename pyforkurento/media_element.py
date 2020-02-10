@@ -8,7 +8,6 @@ class MediaElement(object):
 
 
     def connect(self, external_sink = None):
-        # Connect two media elements
         if(external_sink is not None):
             sink_id = external_sink
         else:
@@ -19,7 +18,7 @@ class MediaElement(object):
             "operation":"connect",
             "operationParams":{
                 "sink":sink_id
-                },
+            },
             "sessionId":self.session_id
         }
     
