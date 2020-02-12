@@ -9,7 +9,12 @@ A python client for Kurento Media Streamer
 sudo docker run --name kms -d -p 8888:8888 kurento/kurento-media-server
 ```
 
-To develop custom filters;
+2. Install PyForKurento
+```bash
+pip install pyforkurento
+```
+
+[Optional] To develop custom filters;
 ```bash
 sudo apt-get update && sudo apt-get install --yes kurento-media-server-dev
 ```
@@ -27,11 +32,21 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 The implementation of this SDK was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
 
 ### REFERENCE DOCUMENTATION
-https://github.com/Kurento/doc-fiware-readthedocs/blob/master/apib/stream_oriented_open_api.apib
+
 
 
 ## CHANGELOG <a id = "change"></a>
 *This changelog follows a loose version of semantic versioning*
+### 0.1.3 12th Feb 2020
+**Improved**
+* Creation of media elements in a media pipeline
+
+**Fixed**
+* Class inheritance structure
+
+**Added**
+* ImageOverlayFilter
+
 ### 0.0.2 5th Feb 2020
 **Fixed**
 * Class method parameters error
