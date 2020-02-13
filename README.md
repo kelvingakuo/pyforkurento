@@ -11,12 +11,28 @@ A python client for Kurento Media Streamer
 sudo docker run --name kms -d -p 8888:8888 kurento/kurento-media-server
 ```
 
-2. Install PyForKurento
+2. Install pyforkurento
 ```bash
 pip install pyforkurento
 ```
 
-[Optional] To develop custom filters;
+3. pyforkurento runs as an application server. You'll need to install relevant packages for the web or mobile client
+
+For Node, Angular etc:
+```bash
+npm install kurento-client kurento-utils
+```
+
+For vanilla Javascript:
+```bash
+```
+
+[Optional] To use GStreamer filters:
+```bash
+sudo apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+```
+
+[Optional] To develop custom filters:
 ```bash
 sudo apt-get update && sudo apt-get install --yes kurento-media-server-dev
 ```
@@ -29,9 +45,7 @@ If you get the error: *Unable to locate package kurento-media-server-dev* try:
 sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filter
 ```
 
-**DO NOT USE THIS SDK IN ANY FORM OF A PRODUCTION ENVIRONMENT**
-
-The implementation of this SDK was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
+**This SDK is not yet 'prod-ready'** and was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
 
 
 ## USAGE <a id = "usage"></a>

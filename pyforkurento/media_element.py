@@ -9,7 +9,7 @@ class MediaElement(object):
         self.elem_id = elem_id
 
 
-    def connect(self, external_sink = None):
+    def _connect(self, external_sink = None):
         if(external_sink is not None):
             sink_id = external_sink.elem_id
         else:
@@ -24,9 +24,9 @@ class MediaElement(object):
             "sessionId":self.session_id
         }
     
-        self.pipeline.invoke(params)
+        self.pipeline._invoke(params)
 
-    def subscribe(self, what):
+    def _subscribe(self, what):
         # Subscribe to server events
         params = {
             "object":self.elem_id,
@@ -34,14 +34,15 @@ class MediaElement(object):
             "sessionId":self.session_id
         }
 
-        self.pipeline.subscribe(params)
+        self.pipeline._subscribe(params)
 
-    def on_event(self, what, callback):
+    def _on_event(self, what, callback):
         # Listen to server POSTs triggered by first subscribing, then invoking the operation
-        self.pipeline.on_event(what, callback)
+        self.pipeline._on_event(what, callback)
 
-    def __add_event_listener(self, event, callback):
+    def _add_event_listener(self, event, callback):
         """ Adds event listeners for events that all Media Elements access
+
         Params:
             - event: The event to listen for. Accepted:
                 * MediaFlowIn - Invoked when media is ready for recording
@@ -51,6 +52,7 @@ class MediaElement(object):
                 * ElementDisconnected - Indicates that an element has been disconnected.
             - callback: Function to be called when event is registered
         """
+        
         expected = ["MediaFlowIn", "MediaFlowOut", "EndOfStream", "ElementConnected", "ElementDisconnected"]
 
         if(event not in expected):
@@ -60,5 +62,5 @@ class MediaElement(object):
                 raise RuntimeError("Callback has to be callable e.g. a function")
 
             else:
-                self.subscribe(event)
-                self.on_event(event, callback)
+                self._subscribe(event)
+                self._on_event(event, callback)

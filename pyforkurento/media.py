@@ -39,11 +39,11 @@ class MediaPipeline(object):
             "object": self.pipeline_id,
             "sessionId": self.session_id
         }
-        self.upstream.release(params)
+        self.upstream._release(params)
 
     
-    def __create_element(self, endpoint_obj):
-        elem = self.upstream.create(self.elem_params)
+    def __create_element(self, endpoint_obj, params):
+        elem = self.upstream._create(params)
         elem_sess_id = elem["payload"]["sessionId"]
         elem_elem_id = elem["payload"]["value"]
 
@@ -52,15 +52,16 @@ class MediaPipeline(object):
     
     def create_endpoint(self, endpoint, **kwargs):
         """ Creates an Endpoint Media Element
+
         Params:
-            - endpoint: String representing the type of endpoint to create. Accepts:
+            - endpoint (str): String representing the type of endpoint to create. Accepts:
                 * WebRtcEndpoint
                 * RtpEndpoint
                 * HttpPostEndpoint
                 * PlayerEndpoint
                 * RecorderEndpoint
             -> This function accepts optional named arguments for different endpoints:
-                - uri: Media URI for recorder & player endpoints only. 
+                - uri (str): Media URI for recorder & player endpoints only. 
                     * For PlayerEndpoint, it's the media to be played
                         Accepted URI schemas are:
                             - file:///path/to/file (File on local file system)
@@ -70,14 +71,17 @@ class MediaPipeline(object):
                         Accepted URI schemas are:
                             - file:///path/to/file (File on local file system)
                             - http(s)://<server-ip>/path/to/file (File on HTTP server)
-                - webrtc_recv_only: Sets a WebRtcEndpoint to be a receiver only
-                - webrtc_send_only: Sets a WebRtcEndpoint to be a sender only
+                - webrtc_recv_only (bool): Sets a WebRtcEndpoint to be a receiver only
+                - webrtc_send_only (bool): Sets a WebRtcEndpoint to be a sender only
 
         Example: To create a WebRTCEndpoint: create_endpoint("WebRtcEndpoint", uri = "rtsp://<server-ip>", webrtc_recv_only = False, webrtc_send_only = False)
 
         Returns:
             - Object of the requested endpoint
         """
+
+        params = self.elem_params
+        
 
         excepted_kwargs = ["uri", "webrtc_recv_only", "webrtc_send_only"]
         uknowns = set(kwargs.keys() - excepted_kwargs)
@@ -91,6 +95,7 @@ class MediaPipeline(object):
             webrtc_send_only = False
         else:
             those_set = kwargs.keys()
+
             if("uri" in those_set):
                 uri = kwargs["uri"]
             if("webrtc_recv_only" in those_set):
@@ -102,68 +107,94 @@ class MediaPipeline(object):
             raise KurentoOperationException("Please specify a URI for the endpoint to record to")
 
         if(endpoint == "WebRtcEndpoint"):
-            self.elem_params["type"] = "WebRtcEndpoint"
-            self.elem_params["constructorParams"]["recvonly"] = webrtc_recv_only
-            self.elem_params["constructorParams"]["sendonly"] = webrtc_send_only
-            return self.__create_element(WebRTCEndpoint)
+            params["type"] = "WebRtcEndpoint"
+            params["constructorParams"]["recvonly"] = webrtc_recv_only
+            params["constructorParams"]["sendonly"] = webrtc_send_only
+            return self.__create_element(WebRTCEndpoint, params)
 
         elif(endpoint == "RtpEndpoint"):
-            self.elem_params["type"] = "RtpEndpoint"
-            return self.__create_element(RTPEndpoint)
+            params["type"] = "RtpEndpoint"
+            return self.__create_element(RTPEndpoint, params)
 
         elif(endpoint == "HttpPostEndpoint"):
-            self.elem_params["type"] = "HttpPostEndpoint"
-            return self.__create_element(HTTPPostEndpoint)
+            params["type"] = "HttpPostEndpoint"
+            return self.__create_element(HTTPPostEndpoint, params)
 
         elif(endpoint == "PlayerEndpoint"):
-            self.elem_params["type"] = "PlayerEndpoint"
-            self.elem_params["constructorParams"]["uri"] = uri
-            return self.__create_element(PlayerEndpoint)
+            params["type"] = "PlayerEndpoint"
+            params["constructorParams"]["uri"] = uri
+            return self.__create_element(PlayerEndpoint, params)
 
         elif(endpoint == "RecorderEndpoint"):
-            self.elem_params["type"] = "RecorderEndpoint"
-            self.elem_params["constructorParams"]["uri"] = uri
-            return self.__create_element(RecorderEndpoint)
+            params["type"] = "RecorderEndpoint"
+            params["constructorParams"]["uri"] = uri
+            return self.__create_element(RecorderEndpoint, params)
 
         else:
             raise KurentoOperationException(f"Unknown endpoint {endpoint} requested")
 
+        
 
-    def create_filter(self, filter, **kwargs):
-        """ Creates a Filter Media Element
+
+    def apply_filter(self, filter, **kwargs):
+        """ Applies a Filter to the stream
+
         Params:
-            - filter: String representing the type of filter to create. Accepts:
-                * FaceOverlayFilter
-                * ZBarFilter
-                * GStreamerFilter
-                * ImageOverlayFilter
+            - filter (str): String representing the type of filter to create. Accepts:
+                * FaceOverlayFilter - Overlays an image on a face detected
+                * ZBarFilter - Triggers an event when a QR code is detected
+                * GStreamerFilter - (https://gstreamer.freedesktop.org/documentation/installing/index.html)
+                * ImageOverlayFilter - Overlays an image on the stream
+            -> This function accepts optional named arguments for different filters:
+                - command (str): The gstreamer command (https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html)
 
         Returns:
             - Object of the requested filter
         """
+
+        params = self.elem_params
+
+        excepted_kwargs = ["command"]
+        uknowns = set(kwargs.keys() - excepted_kwargs)
+        if(len(uknowns) > 0):
+            raise KurentoOperationException(f"Unkown keyword arguments {uknowns} passed")
+
+        if(len(kwargs) == 0):
+            # Default values
+            command = "videobox fill=black top=20 bottom=20 left=-75 right=-75"
+        else:
+            those_set = kwargs.keys()
+            if("command" in those_set):
+                command = kwargs["command"]
+
+
         if(filter == "FaceOverlayFilter"):
-            self.elem_params["type"] = "FaceOverlayFilter"
-            return self.__create_element(FaceOverlayFilter)
+            params["type"] = "FaceOverlayFilter"
+            return self.__create_element(FaceOverlayFilter, params)
 
         elif(filter == "ZBarFilter"):
-            self.elem_params["type"] = "ZBarFilter"
-            return self.__create_element(ZBarFilter)
+            params["type"] = "ZBarFilter"
+            return self.__create_element(ZBarFilter, params)
 
         elif(filter == "GStreamerFilter"):
-            self.elem_params["type"] = "GStreamerFilter"
-            return self.__create_element(GStreamerFilter)
+            params["type"] = "GStreamerFilter"
+            params["constructorParams"]["command"] = command
+            return self.__create_element(GStreamerFilter, params)
 
         elif(filter == "ImageOverlayFilter"):
-            self.elem_params["type"] = "ImageOverlayFilter"
-            return self.__create_element(ImageOverlayFilter)
+            params["type"] = "ImageOverlayFilter"
+            return self.__create_element(ImageOverlayFilter, params)
 
         else:
             raise KurentoOperationException(f"Unknown filter {filter} requested")
 
+        
+
     def create_hub(self, hub, **kwargs):
         """ Creates a Hub Media Element
+
         Params:
-            - hub: String representing the type of hub to create. Accepts:
+            - hub (str): String representing the type of hub to create. Accepts:
                 * Composite
                 * Dispatcher
                 * DispatcherOneToMany
@@ -171,20 +202,25 @@ class MediaPipeline(object):
         Returns:
             - Object of the requested hub
         """
+        
+        params = self.elem_params        
+
         if(hub == "Composite"):
-            self.elem_params["type"] = "Composite"
-            return self.__create_element(Composite)
+            params["type"] = "Composite"
+            return self.__create_element(Composite, params)
 
         elif(hub == "Dispatcher"):
-            self.elem_params["type"] = "Dispatcher"
-            return self.__create_element(Dispatcher)
+            params["type"] = "Dispatcher"
+            return self.__create_element(Dispatcher, params)
 
         elif(hub == "DispatcherOneToMany"):
-            self.elem_params["type"] = "DispatcherOneToMany"
-            return self.__create_element(DispatcherOneToMany)
+            params["type"] = "DispatcherOneToMany"
+            return self.__create_element(DispatcherOneToMany, params)
 
         else:
             raise KurentoOperationException(f"Unknown hub {hub} requested")
+
+        
 
 
 

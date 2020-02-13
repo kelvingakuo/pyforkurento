@@ -17,20 +17,26 @@ class FaceOverlayFilter(Filter):
     
     def connect(self, sink_elem = None):
         """ Connect FaceOverlayFilter to another element
+
         Params:
-            sink_elem: Media Element to connect to. If left blank, the element connects to itself
+            sink_elem (obj): Media Element to connect to. If left blank, the element connects to itself
         """
-        super().connect(sink_elem)
+
+        super()._connect(sink_elem)
 
     def set_face_overlay_image(self, image_uri, offset_x = 0.0, offset_y = 0.0, width = 1.0, height = 1.0):
         """ Sets the image to overlay on a detected face
+
         Params:
-            - image_uri: Location of image to use e.g. /etc/over.jpg
+            - image_uri (str): Location of image to use. Accepted URI schemas are:
+                - file:///path/to/file (File on local file system)
+                - http(s)://<server-ip>/path/to/file (File on HTTP server)
             - offset_x (float): How much left or right (a ratio of face width) to move the image in reference to detected face's upper right corner coordinates
             - offset_y (float): How much up or down (a ratio of face height) to move the image in reference to detected face's upper right corner coordinates
             - width (float) >=0.0 : How much of the face's width the image should cover e.g. 1.0 means cover the entire width
             - height (float) >=0.0: How much of the face's height the image should cover e.g. 1.0 means cover the entire height
         """
+
         params = {
             "object": self.elem_id,
             "operation": "setOverlayedImage",
@@ -44,17 +50,18 @@ class FaceOverlayFilter(Filter):
             },
             "sessionId": self.session_id
         }
-        self.pipeline.invoke(params)
+        self.pipeline._invoke(params)
 
     def unset_face_overlay_image(self):
         """ Removes the image overlayed on faces
         """
+
         params = {
             "object": self.elem_id,
             "operation": "unsetOverlayedImage",
             "sessionId": self.session_id
         }
-        self.pipeline.invoke(params)
+        self.pipeline._invoke(params)
 
 
 
@@ -69,23 +76,29 @@ class ImageOverlayFilter(Filter):
     
     def connect(self, sink_elem = None):
         """ Connect ImageOverlayFilter to another element
+
         Params:
-            sink_elem: Media Element to connect to. If left blank, the element connects to itself
+            sink_elem (obj): Media Element to connect to. If left blank, the element connects to itself
         """
-        super().connect(sink_elem)
+
+        super()._connect(sink_elem)
 
     def overlay_image(self, image_uri, image_id, offset_x = 0.0, offset_y = 0.0, relative_width = 1.0, relative_height = 1.0, keep_aspect_ratio = True, to_centre = True):
         """ Draws an image on the video feed at the specified location
+
         Params:
-            - image_id: A unique identifier for the image. Recommendation: str(uuid.uuid4())
-            - image_uri: Location of image to use e.g. /etc/over.jpg
+            - image_id (str): A unique identifier for the image. Recommendation: str(uuid.uuid4())
+            - image_uri (str): Location of image to use. Accepted URI schemas are:
+                - file:///path/to/file (File on local file system)
+                - http(s)://<server-ip>/path/to/file (File on HTTP server)
             - offset_x (float) [0 - 1]: Percentage of image width to set overlay image left upper conner X coords
             - offset_y (float) [0 - 1]: Percentage of image height to set overlay image left upper conner Y coords
             - relative_width (float) [0 - 1]: Width of the overlay image in relation to the video stream e.g. 1.0 means full width
             - relative_height (float) [0 - 1]: Height of the overlay image in relation to the video stream e.g. 1.0 means full height
-            - keep_aspect_ratio: Whether to keep the image's aspect ratio
-            - to_centre: Whether to centre the image in the region defined
+            - keep_aspect_ratio (bool): Whether to keep the image's aspect ratio
+            - to_centre (bool): Whether to centre the image in the region defined
         """
+
         self.image_id = image_id
         params = {
             "object": self.elem_id,
@@ -103,11 +116,12 @@ class ImageOverlayFilter(Filter):
             },
             "sessionId": self.session_id
         }
-        self.pipeline.invoke(params) 
+        self.pipeline._invoke(params) 
 
     def remove_image(self):
         """ Remove the overlayed image from the stream
         """
+
         params = {
             "object": self.elem_id,
             "operation": "removeImage",
@@ -116,7 +130,7 @@ class ImageOverlayFilter(Filter):
             },
             "sessionId": self.session_id
         }
-        self.pipeline.invoke(params)
+        self.pipeline._invoke(params)
 
 
 class ZBarFilter(Filter):
@@ -126,24 +140,35 @@ class ZBarFilter(Filter):
 
     def __str__(self):
         return f"ZBarFilter ID: {self.elem_id} Session ID: {self.session_id}\n"
+    
+    def connect(self, sink_elem = None):
+        """ Connect ZBarFilter to another element
+
+        Params:
+            sink_elem (obj): Media Element to connect to. If left blank, the element connects to itself
+        """
+
+        super()._connect(sink_elem)
 
     def add_event_listener(self, event, callback):
         """ Adds an event listener function for a specific ZBarFilter event
+
         Params:
-            - event: The event to listen for. Accepted:
+            - event (str): The event to listen for. Accepted:
                 * CodeFoundEvent - Triggered when a BarCode or QR code is found in the video stream
-            - callback: Function to be called when event is registered
+            - callback (func): Function to be called when event is registered
         """
+
         expected = ["CodeFoundEvent"]
 
         if(event not in expected):
-            super().__add_event_listener(event, callback)
+            super()._add_event_listener(event, callback)
         else:        
             if not callable(callback):
                 raise RuntimeError("Callback has to be callable e.g. a function")
             else:
-                super().subscribe(event)
-                super().on_event(event, callback)
+                super()._subscribe(event)
+                super()._on_event(event, callback)
 
 
 class GStreamerFilter(Filter):
@@ -152,3 +177,15 @@ class GStreamerFilter(Filter):
 
     def __str__(self):
         return f"GStreamerFilter ID: {self.elem_id} Session ID: {self.session_id}\n"
+
+    def set_element_property(self):
+        pass
+    
+    def connect(self, sink_elem = None):
+        """ Connect GStreamerFilter to another element
+
+        Params:
+            sink_elem (obj): Media Element to connect to. If left blank, the element connects to itself
+        """
+        
+        super()._connect(sink_elem)

@@ -19,6 +19,7 @@ class BaseKurentoClient(object):
         Params:
             kurento_server_url (str) - The Kurento server WebSockets url
         """
+
         self.kurento_url = kurento_server_url
         self.conn_id = randint(5, 12345678)# Incremented everytime a transaction is complete
         self.kurento_conn = websocket.WebSocket()
@@ -68,6 +69,7 @@ class BaseKurentoClient(object):
     def listen_to_replies(self, operations_q, subscriptions_q, tracking_q):
         """ Seperate thread to listen for replies from the server
         """
+
         while self.kurento_conn.connected:
             try:
                 self.parse_reply(self.kurento_conn.recv(), operations_q, subscriptions_q, tracking_q)
@@ -79,6 +81,7 @@ class BaseKurentoClient(object):
     def parse_reply(self, resp, operations_q, subscriptions_q, tracking_q):
         """ Listens for server response & deconstructs
         """
+
         try:
             if not self.kurento_conn.connected:
                 self.reconnect()
@@ -122,6 +125,7 @@ class BaseKurentoClient(object):
     def reconnect(self):
         """ Reconnect to Kurento if connection was killed
         """
+
         if not self.kurento_conn.connected:
             try:
                 self.kurento_conn.connect(self.kurento_url)
@@ -131,12 +135,14 @@ class BaseKurentoClient(object):
     def close_connection(self):
         """ Close an existing connection to Kurento
         """
+
         if(self.kurento_conn.connected):
             self.kurento_conn.close()
 
     def send_payload(self, payload):
         """ Websockets send with delay
         """
+
         try:
             self.kurento_conn.send(payload)
             time.sleep(0.005) # Wait for reply
@@ -146,16 +152,21 @@ class BaseKurentoClient(object):
     def get_response_from_queue(self, req_id):
         """ Find response dict from list of dicts by request id
         """
+
         resp = next((x for x in self.operations if x["resp_id"] == req_id), "ERROR: Operation not in queue")
         return resp
 
     def remove_response_from_queue(self, resp):
+        """ Remove response dict from list of dicts
+        """
+
         self.operations = [op for op in self.operations if op != resp]
 
 
     def ping(self):
         """ Make a ping request to the server
         """
+        
         req_id = self.conn_id + 1
         load = rpc_payload("ping", req_id, {})
         self.send_payload(load)
