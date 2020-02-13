@@ -1,3 +1,5 @@
+from .exceptions import KurentoOperationException
+
 class MediaElement(object):
     """ Base class for ALL media elements
     """
@@ -35,5 +37,28 @@ class MediaElement(object):
         self.pipeline.subscribe(params)
 
     def on_event(self, what, callback):
-        # Listen to server POSTs triggered by subscribe() -> invoke()
+        # Listen to server POSTs triggered by first subscribing, then invoking the operation
         self.pipeline.on_event(what, callback)
+
+    def __add_event_listener(self, event, callback):
+        """ Adds event listeners for events that all Media Elements access
+        Params:
+            - event: The event to listen for. Accepted:
+                * MediaFlowIn - Invoked when media is ready for recording
+                * MediaFlowOut - Invoked when media is no longer ready for recording
+                * EndOfStream - Invoked when the stream that the element sends out is finished.
+                * ElementConnected - Indicates that an element has been connected to other.
+                * ElementDisconnected - Indicates that an element has been disconnected.
+            - callback: Function to be called when event is registered
+        """
+        expected = ["MediaFlowIn", "MediaFlowOut", "EndOfStream", "ElementConnected", "ElementDisconnected"]
+
+        if(event not in expected):
+            raise KurentoOperationException("Uknown event requested")
+        else:
+            if not callable(callback):
+                raise RuntimeError("Callback has to be callable e.g. a function")
+
+            else:
+                self.subscribe(event)
+                self.on_event(event, callback)

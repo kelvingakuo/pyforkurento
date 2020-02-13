@@ -1,4 +1,4 @@
-# Media Elements & Pipelines
+# MediaPipeline actions
 from .endpoints import WebRTCEndpoint
 from .endpoints import PlayerEndpoint
 from .endpoints import HTTPPostEndpoint
@@ -50,7 +50,7 @@ class MediaPipeline(object):
         return endpoint_obj(elem_sess_id, elem_elem_id, self.upstream)
 
     
-    def create_endpoint(self, endpoint, uri = ''):
+    def create_endpoint(self, endpoint, **kwargs):
         """ Creates an Endpoint Media Element
         Params:
             - endpoint: String representing the type of endpoint to create. Accepts:
@@ -59,18 +59,52 @@ class MediaPipeline(object):
                 * HttpPostEndpoint
                 * PlayerEndpoint
                 * RecorderEndpoint
-            - uri: A string repping the media URI for recorder & webrtc endpoints only.
-                * For WebRtcEndpoint, it's the media to be played
-                * For RecorderEndpoint, it's the location to record to
+            -> This function accepts optional named arguments for different endpoints:
+                - uri: Media URI for recorder & player endpoints only. 
+                    * For PlayerEndpoint, it's the media to be played
+                        Accepted URI schemas are:
+                            - file:///path/to/file (File on local file system)
+                            - rtsp://<server-ip> (IP camera RTSP URLs)
+                            - http(s)://<server-ip>/path/to/file (File on HTTP server)
+                    * For RecorderEndpoint, it's the location to record to
+                        Accepted URI schemas are:
+                            - file:///path/to/file (File on local file system)
+                            - http(s)://<server-ip>/path/to/file (File on HTTP server)
+                - webrtc_recv_only: Sets a WebRtcEndpoint to be a receiver only
+                - webrtc_send_only: Sets a WebRtcEndpoint to be a sender only
+
+        Example: To create a WebRTCEndpoint: create_endpoint("WebRtcEndpoint", uri = "rtsp://<server-ip>", webrtc_recv_only = False, webrtc_send_only = False)
 
         Returns:
             - Object of the requested endpoint
         """
+
+        excepted_kwargs = ["uri", "webrtc_recv_only", "webrtc_send_only"]
+        uknowns = set(kwargs.keys() - excepted_kwargs)
+        if(len(uknowns) > 0):
+            raise KurentoOperationException(f"Unkown keyword arguments {uknowns} passed")
+
+        if(len(kwargs) == 0):
+            # Default values
+            uri = ''
+            webrtc_recv_only = False
+            webrtc_send_only = False
+        else:
+            those_set = kwargs.keys()
+            if("uri" in those_set):
+                uri = kwargs["uri"]
+            if("webrtc_recv_only" in those_set):
+                webrtc_recv_only = kwargs["webrtc_recv_only"]
+            if("webrtc_send_only" in those_set):
+                webrtc_send_only = kwargs["webrtc_send_only"]
+
         if(endpoint == "RecorderEndpoint" and uri == ''):
             raise KurentoOperationException("Please specify a URI for the endpoint to record to")
 
         if(endpoint == "WebRtcEndpoint"):
             self.elem_params["type"] = "WebRtcEndpoint"
+            self.elem_params["constructorParams"]["recvonly"] = webrtc_recv_only
+            self.elem_params["constructorParams"]["sendonly"] = webrtc_send_only
             return self.__create_element(WebRTCEndpoint)
 
         elif(endpoint == "RtpEndpoint"):
@@ -95,7 +129,7 @@ class MediaPipeline(object):
             raise KurentoOperationException(f"Unknown endpoint {endpoint} requested")
 
 
-    def create_filter(self, filter):
+    def create_filter(self, filter, **kwargs):
         """ Creates a Filter Media Element
         Params:
             - filter: String representing the type of filter to create. Accepts:
@@ -126,7 +160,7 @@ class MediaPipeline(object):
         else:
             raise KurentoOperationException(f"Unknown filter {filter} requested")
 
-    def create_hub(self, hub):
+    def create_hub(self, hub, **kwargs):
         """ Creates a Hub Media Element
         Params:
             - hub: String representing the type of hub to create. Accepts:

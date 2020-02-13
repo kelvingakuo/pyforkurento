@@ -1,3 +1,4 @@
+from .exceptions import KurentoOperationException
 from .media_element import MediaElement
 
 class Filter(MediaElement):
@@ -19,7 +20,7 @@ class FaceOverlayFilter(Filter):
         Params:
             sink_elem: Media Element to connect to. If left blank, the element connects to itself
         """
-        return super().connect(sink_elem)
+        super().connect(sink_elem)
 
     def set_face_overlay_image(self, image_uri, offset_x = 0.0, offset_y = 0.0, width = 1.0, height = 1.0):
         """ Sets the image to overlay on a detected face
@@ -71,7 +72,7 @@ class ImageOverlayFilter(Filter):
         Params:
             sink_elem: Media Element to connect to. If left blank, the element connects to itself
         """
-        return super().connect(sink_elem)
+        super().connect(sink_elem)
 
     def overlay_image(self, image_uri, image_id, offset_x = 0.0, offset_y = 0.0, relative_width = 1.0, relative_height = 1.0, keep_aspect_ratio = True, to_centre = True):
         """ Draws an image on the video feed at the specified location
@@ -126,15 +127,24 @@ class ZBarFilter(Filter):
     def __str__(self):
         return f"ZBarFilter ID: {self.elem_id} Session ID: {self.session_id}\n"
 
-    def code_found_event(self, callback):
-        """ Triggered when a BarCode or QR code is found in the video stream
+    def add_event_listener(self, event, callback):
+        """ Adds an event listener function for a specific ZBarFilter event
         Params:
-            - callback : A Function to be called when a barcode is found
+            - event: The event to listen for. Accepted:
+                * CodeFoundEvent - Triggered when a BarCode or QR code is found in the video stream
+            - callback: Function to be called when event is registered
         """
-        if not callable(callback):
-            raise RuntimeError("Callback has to be callable e.g. a function")
-        else:
-            super().on_event("CodeFoundEvent", callback)
+        expected = ["CodeFoundEvent"]
+
+        if(event not in expected):
+            super().__add_event_listener(event, callback)
+        else:        
+            if not callable(callback):
+                raise RuntimeError("Callback has to be callable e.g. a function")
+            else:
+                super().subscribe(event)
+                super().on_event(event, callback)
+
 
 class GStreamerFilter(Filter):
     def __init__(self, session_id, elem_id, pipeline_class):

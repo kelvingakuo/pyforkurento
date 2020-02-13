@@ -1,9 +1,11 @@
 A python client for Kurento Media Streamer
 
 ## CONTENTS
-1. [Changelog](#change)
+[Setup](#setup)
+[Usage](#usage)
+[Changelog](#change)
 
-## USAGE
+## SETUP <a id = "setup"></a>
 1. Install Kurento
 ```bash
 sudo docker run --name kms -d -p 8888:8888 kurento/kurento-media-server
@@ -31,12 +33,18 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 
 The implementation of this SDK was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
 
-### REFERENCE DOCUMENTATION
+
+## USAGE <a id = "usage"></a>
+**Before** you start using ```pyforkurento``` and have a pretty good understanding of KMS, go through [this refresher](https://doc-kurento.readthedocs.io/en/stable/features/kurento_api.html) first
 
 
 
 ## CHANGELOG <a id = "change"></a>
 *This changelog follows a loose version of semantic versioning*
+### 0.1.4 13th Feb 2020
+**Improved**
+* Addition of event listeners to media elements
+
 ### 0.1.3 12th Feb 2020
 **Improved**
 * Creation of media elements in a media pipeline
