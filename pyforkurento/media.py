@@ -147,6 +147,7 @@ class MediaPipeline(object):
                 * ImageOverlayFilter - Overlays an image on the stream
             -> This function accepts optional named arguments for different filters:
                 - command (str): The gstreamer command (https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html)
+                - filter_type (str): The type of the gstreamer filter (AUDIO, VIDEO, or AUTODETECT)
 
         Returns:
             - Object of the requested filter
@@ -162,6 +163,7 @@ class MediaPipeline(object):
         if(len(kwargs) == 0):
             # Default values
             command = "videobox fill=black top=20 bottom=20 left=-75 right=-75"
+            filter_type = "AUTODETECT"
         else:
             those_set = kwargs.keys()
             if("command" in those_set):
@@ -179,6 +181,7 @@ class MediaPipeline(object):
         elif(filter == "GStreamerFilter"):
             params["type"] = "GStreamerFilter"
             params["constructorParams"]["command"] = command
+            params["constructorParams"]["filterType"] = filter_type
             return self.__create_element(GStreamerFilter, params)
 
         elif(filter == "ImageOverlayFilter"):

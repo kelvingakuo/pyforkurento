@@ -54,7 +54,8 @@ class PlayerEndpoint(Endpoint):
             "sessionId": self.session_id
         }
         self.pipeline._invoke(params)
-        
+
+  
 
 class WebRTCEndpoint(Endpoint):
     def __init__(self, session_id, elem_id, pipeline_class):

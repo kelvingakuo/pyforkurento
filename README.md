@@ -45,7 +45,7 @@ If you get the error: *Unable to locate package kurento-media-server-dev* try:
 sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filter
 ```
 
-**This SDK is not yet 'prod-ready'** and was inspired by [this abandoned project](https://github.com/minervaproject/pykurento/tree/master/pykurento)
+**This SDK is not yet 'prod-ready'** and was inspired by [this abandoned project](https://github.com/minervaproject/pykurento)
 
 
 ## USAGE <a id = "usage"></a>
