@@ -63,6 +63,12 @@ class FaceOverlayFilter(Filter):
         }
         self.pipeline._invoke(params)
 
+    def add_event_listener(self, event, callback):
+        """ Adds an event listener function for a specific FaceOverlayFilter event
+        """
+
+        super()._add_event_listener(event, callback)
+
 
 
 class ImageOverlayFilter(Filter):
@@ -132,6 +138,12 @@ class ImageOverlayFilter(Filter):
         }
         self.pipeline._invoke(params)
 
+    def add_event_listener(self, event, callback):
+        """ Adds an event listener function for a specific ImageOverlayFilter event
+        """
+
+        super()._add_event_listener(event, callback)
+
 
 class ZBarFilter(Filter):
     # Detects QR and bar codes in the stream
@@ -189,3 +201,10 @@ class GStreamerFilter(Filter):
         """
         
         super()._connect(sink_elem)
+
+
+    def add_event_listener(self, event, callback):
+        """ Adds an event listener function for a specific GStreamerFilter event
+        """
+
+        super()._add_event_listener(event, callback)

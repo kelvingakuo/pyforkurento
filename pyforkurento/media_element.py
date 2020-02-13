@@ -50,10 +50,11 @@ class MediaElement(object):
                 * EndOfStream - Invoked when the stream that the element sends out is finished.
                 * ElementConnected - Indicates that an element has been connected to other.
                 * ElementDisconnected - Indicates that an element has been disconnected.
+                * Error: An error related to the MediaObject has occurred.
             - callback: Function to be called when event is registered
         """
         
-        expected = ["MediaFlowIn", "MediaFlowOut", "EndOfStream", "ElementConnected", "ElementDisconnected"]
+        expected = ["MediaFlowIn", "MediaFlowOut", "EndOfStream", "ElementConnected", "ElementDisconnected", "Error"]
 
         if(event not in expected):
             raise KurentoOperationException("Uknown event requested")

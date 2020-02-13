@@ -87,21 +87,23 @@ class MediaPipeline(object):
         uknowns = set(kwargs.keys() - excepted_kwargs)
         if(len(uknowns) > 0):
             raise KurentoOperationException(f"Unkown keyword arguments {uknowns} passed")
+        
 
-        if(len(kwargs) == 0):
-            # Default values
+        those_set = kwargs.keys()
+
+        if("uri" not in those_set):
             uri = ''
+        else:
+            uri = kwargs["uri"]
+        if("webrtc_recv_only" not in those_set):
             webrtc_recv_only = False
+        else:
+            webrtc_recv_only = kwargs["webrtc_recv_only"]
+        if("webrtc_send_only" not in those_set):
             webrtc_send_only = False
         else:
-            those_set = kwargs.keys()
+            webrtc_send_only = kwargs["webrtc_send_only"]
 
-            if("uri" in those_set):
-                uri = kwargs["uri"]
-            if("webrtc_recv_only" in those_set):
-                webrtc_recv_only = kwargs["webrtc_recv_only"]
-            if("webrtc_send_only" in those_set):
-                webrtc_send_only = kwargs["webrtc_send_only"]
 
         if(endpoint == "RecorderEndpoint" and uri == ''):
             raise KurentoOperationException("Please specify a URI for the endpoint to record to")
@@ -155,19 +157,22 @@ class MediaPipeline(object):
 
         params = self.elem_params
 
-        excepted_kwargs = ["command"]
+        excepted_kwargs = ["command", "filter_type"]
         uknowns = set(kwargs.keys() - excepted_kwargs)
         if(len(uknowns) > 0):
             raise KurentoOperationException(f"Unkown keyword arguments {uknowns} passed")
 
-        if(len(kwargs) == 0):
-            # Default values
+        those_set = kwargs.keys()
+
+        if("command" not in those_set):
             command = "videobox fill=black top=20 bottom=20 left=-75 right=-75"
+        else:
+            command = kwargs["command"]
+
+        if("filter_type" not in those_set):
             filter_type = "AUTODETECT"
         else:
-            those_set = kwargs.keys()
-            if("command" in those_set):
-                command = kwargs["command"]
+            filter_type = kwargs["filter_type"]
 
 
         if(filter == "FaceOverlayFilter"):

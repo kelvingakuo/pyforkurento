@@ -55,6 +55,11 @@ class PlayerEndpoint(Endpoint):
         }
         self.pipeline._invoke(params)
 
+    def add_event_listener(self, event, callback):
+        """ Adds an event listener function for a specific PlayerEndpoint event
+        """
+        super()._add_event_listener(event, callback)
+
   
 
 class WebRTCEndpoint(Endpoint):
@@ -125,7 +130,7 @@ class WebRTCEndpoint(Endpoint):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific PlayerEndpoint event
+        """ Adds an event listener function for a specific WebRTCEndpoint event
 
         Params:
             - event (str): The event to listen for. Accepted:
