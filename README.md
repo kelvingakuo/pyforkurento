@@ -20,12 +20,10 @@ pip install pyforkurento
 
 For Node, Angular etc:
 ```bash
-npm install kurento-client kurento-utils
+npm install kurento-utils
 ```
 
-For vanilla Javascript:
-```bash
-```
+TODO: For vanilla Javascript:
 
 [Optional] To use GStreamer filters:
 ```bash
