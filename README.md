@@ -1,9 +1,9 @@
 A python client for Kurento Media Streamer
 
 ## CONTENTS
-[Setup](#setup)
-[Usage](#usage)
-[Changelog](#change)
+1. [Setup](#setup)
+2. [Sample Usage](#usage)
+3. [Changelog](#change)
 
 ## SETUP <a id = "setup"></a>
 1. Install Kurento
@@ -48,8 +48,11 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 **This SDK is not yet 'prod-ready'** and was inspired by [this abandoned project](https://github.com/minervaproject/pykurento)
 
 
-## USAGE <a id = "usage"></a>
+## SAMPLE USAGE <a id = "usage"></a>
 **Before** you start using ```pyforkurento``` and have a pretty good understanding of KMS, go through [this refresher](https://doc-kurento.readthedocs.io/en/stable/features/kurento_api.html) first
+
+
+**Read the complete documentation here: https://pyforkurento.readthedocs.io/en/latest/**
 
 
 
