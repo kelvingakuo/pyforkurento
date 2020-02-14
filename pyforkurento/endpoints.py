@@ -2,11 +2,17 @@ from .exceptions import KurentoOperationException
 from .media_element import MediaElement
 
 class Endpoint(MediaElement):
+    """ All endpoints base class
+    """
+
     def __init__(self, sess_id, point_id, pipeline_class):
         super().__init__(sess_id, point_id, pipeline_class)
 
 # =============== ENDPOINTS =====================
 class PlayerEndpoint(Endpoint):
+    """ An input endpoint that retrieves content from file system, HTTP URL or RTSP URL and injects it into the media pipeline.
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -56,13 +62,16 @@ class PlayerEndpoint(Endpoint):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific PlayerEndpoint event
+        """ Adds an event listener function for a specific PlayerEndpoint event or a general MediaElement event
         """
         super()._add_event_listener(event, callback)
 
   
 
 class WebRTCEndpoint(Endpoint):
+    """ An output and input endpoint that provides media streaming for Real Time Communications (RTC) through the web. It implements WebRTC technology to communicate with browsers.
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -130,7 +139,7 @@ class WebRTCEndpoint(Endpoint):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific WebRTCEndpoint event
+        """ Adds an event listener function for a specific WebRTCEndpoint event or a general MediaElement event
 
         Params:
             - event (str): The event to listen for. Accepted:
@@ -153,6 +162,9 @@ class WebRTCEndpoint(Endpoint):
 
 
 class RecorderEndpoint(Endpoint):
+    """ An output endpoint that provides function to store contents in reliable mode (doesn’t discard data).
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -191,7 +203,7 @@ class RecorderEndpoint(Endpoint):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific RecorderEndpoint event
+        """ Adds an event listener function for a specific RecorderEndpoint event or a general MediaElement event
 
         Params:
             - event (str): The event to listen for. Accepted:
@@ -214,6 +226,9 @@ class RecorderEndpoint(Endpoint):
 
 
 class RTPEndpoint(Endpoint):
+    """ An output and input endpoint. That is, provides bidirectional content delivery capabilities with remote networked peers through RTP protocol. 
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -223,6 +238,9 @@ class RTPEndpoint(Endpoint):
 
 
 class HTTPPostEndpoint(Endpoint):
+    """ An input endpoint that accepts media using http POST requests like HTTP file upload function.
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 

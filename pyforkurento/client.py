@@ -58,7 +58,7 @@ class KurentoClient(BaseKurentoClient):
         return super().unsubscribe(params)
 
     def ping(self):
-        """ Prints 'pong' if a connection to KMS is available
+        """ Prints 'pong' if a connection to KMS is available. Otherwise, an expection is thrown
         """
 
         return super().ping()

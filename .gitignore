@@ -1,3 +1,5 @@
+**/.vscode
+**/_build/
 **/dist/*
 **/build/*
 **/__pycache__/**

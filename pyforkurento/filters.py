@@ -2,13 +2,18 @@ from .exceptions import KurentoOperationException
 from .media_element import MediaElement
 
 class Filter(MediaElement):
+    """ All filters base class
+    """
+
     def __init__(self, sess_id, filter_id, pipeline_class):
         super().__init__(sess_id, filter_id, pipeline_class)
 
 
 # =============== ENDPOINTS =====================
 class FaceOverlayFilter(Filter):
-    # Overlays an image on detecting a face in the stream   
+    """ Detects faces in a video stream and overlays them with a configurable image.  
+    """
+    
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -64,7 +69,7 @@ class FaceOverlayFilter(Filter):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific FaceOverlayFilter event
+        """ Adds an event listener function for a specific FaceOverlayFilter event or a general MediaElement event
         """
 
         super()._add_event_listener(event, callback)
@@ -72,7 +77,9 @@ class FaceOverlayFilter(Filter):
 
 
 class ImageOverlayFilter(Filter):
-    # Overlays an image on the video stream
+    """ Overlays a configurable image on the video stream
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
         self.image_id = ""
@@ -139,14 +146,16 @@ class ImageOverlayFilter(Filter):
         self.pipeline._invoke(params)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific ImageOverlayFilter event
+        """ Adds an event listener function for a specific ImageOverlayFilter event or a general MediaElement event
         """
 
         super()._add_event_listener(event, callback)
 
 
 class ZBarFilter(Filter):
-    # Detects QR and bar codes in the stream
+    """ Detects QR and bar codes in a video stream. When a code is found, the filter raises a CodeFoundEvent
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -163,7 +172,7 @@ class ZBarFilter(Filter):
         super()._connect(sink_elem)
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific ZBarFilter event
+        """ Adds an event listener function for a specific ZBarFilter event or a general MediaElement event
 
         Params:
             - event (str): The event to listen for. Accepted:
@@ -184,6 +193,9 @@ class ZBarFilter(Filter):
 
 
 class GStreamerFilter(Filter):
+    """ A generic filter interface that allows usage of GStreamer filters in Kurento Media Pipelines.
+    """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         super().__init__(session_id, elem_id, pipeline_class)
 
@@ -204,7 +216,7 @@ class GStreamerFilter(Filter):
 
 
     def add_event_listener(self, event, callback):
-        """ Adds an event listener function for a specific GStreamerFilter event
+        """ Adds an event listener function for a specific GStreamerFilter event or a general MediaElement event
         """
 
         super()._add_event_listener(event, callback)

@@ -17,6 +17,9 @@ from .hubs import DispatcherOneToMany
 from .exceptions import KurentoOperationException
 
 class MediaPipeline(object):
+    """ Base class for creating Media Elements
+    """
+
     def __init__(self, session_id, pipeline_id, client_class):
         self.session_id = session_id
         self.pipeline_id = pipeline_id
@@ -60,7 +63,10 @@ class MediaPipeline(object):
                 * HttpPostEndpoint
                 * PlayerEndpoint
                 * RecorderEndpoint
-            -> This function accepts optional named arguments for different endpoints:
+
+            - kwargs: Optional named arguments for different endpoints:
+                - webrtc_recv_only (bool): Sets a WebRtcEndpoint to be a receiver only
+                - webrtc_send_only (bool): Sets a WebRtcEndpoint to be a sender only
                 - uri (str): Media URI for recorder & player endpoints only. 
                     * For PlayerEndpoint, it's the media to be played
                         Accepted URI schemas are:
@@ -71,10 +77,6 @@ class MediaPipeline(object):
                         Accepted URI schemas are:
                             - file:///path/to/file (File on local file system)
                             - http(s)://<server-ip>/path/to/file (File on HTTP server)
-                - webrtc_recv_only (bool): Sets a WebRtcEndpoint to be a receiver only
-                - webrtc_send_only (bool): Sets a WebRtcEndpoint to be a sender only
-
-        Example: To create a WebRTCEndpoint: create_endpoint("WebRtcEndpoint", uri = "rtsp://<server-ip>", webrtc_recv_only = False, webrtc_send_only = False)
 
         Returns:
             - Object of the requested endpoint
@@ -136,8 +138,6 @@ class MediaPipeline(object):
             raise KurentoOperationException(f"Unknown endpoint {endpoint} requested")
 
         
-
-
     def apply_filter(self, filter, **kwargs):
         """ Applies a Filter to the stream
 
@@ -147,7 +147,8 @@ class MediaPipeline(object):
                 * ZBarFilter - Triggers an event when a QR code is detected
                 * GStreamerFilter - (https://gstreamer.freedesktop.org/documentation/installing/index.html)
                 * ImageOverlayFilter - Overlays an image on the stream
-            -> This function accepts optional named arguments for different filters:
+
+            - kwargs: Optional named arguments for different endpoints:
                 - command (str): The gstreamer command (https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html)
                 - filter_type (str): The type of the gstreamer filter (AUDIO, VIDEO, or AUTODETECT)
 

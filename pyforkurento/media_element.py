@@ -1,8 +1,9 @@
 from .exceptions import KurentoOperationException
 
 class MediaElement(object):
-    """ Base class for ALL media elements
+    """ Base class for ALL media elements i.e. Endpoints, Filters, and Hubs
     """
+
     def __init__(self, session_id, elem_id, pipeline_class):
         self.pipeline = pipeline_class
         self.session_id = session_id
@@ -41,7 +42,7 @@ class MediaElement(object):
         self.pipeline._on_event(what, callback)
 
     def _add_event_listener(self, event, callback):
-        """ Adds event listeners for events that all Media Elements access
+        """ [DO NOT OVERRIDE!!] Adds event listeners for events that all Media Elements can implement
 
         Params:
             - event: The event to listen for. Accepted:
