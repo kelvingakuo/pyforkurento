@@ -58,6 +58,10 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 
 ## CHANGELOG <a id = "change"></a>
 *This changelog follows a loose version of semantic versioning*
+### 0.1.5 14th Feb 2020
+**Improved**
+* Documentation significantly, and hosted on readthedocs
+
 ### 0.1.4 13th Feb 2020
 **Improved**
 * Addition of event listeners to media elements
