@@ -1,7 +1,7 @@
 MediaPipeline
 ========================================
 
-.. automodule:: pyforkurento.media
+.. automodule:: pyforkurento.pipeline
 
 .. autoclass:: MediaPipeline
    :members:

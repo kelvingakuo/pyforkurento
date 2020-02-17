@@ -1,5 +1,5 @@
 from .base import BaseKurentoClient
-from .media import MediaPipeline
+from .pipeline import MediaPipeline
 
 from .exceptions import KurentoOperationException
 

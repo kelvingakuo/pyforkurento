@@ -53,8 +53,8 @@ class MediaPipeline(object):
         return endpoint_obj(elem_sess_id, elem_elem_id, self.upstream)
 
     
-    def create_endpoint(self, endpoint, **kwargs):
-        """ Creates an Endpoint Media Element
+    def add_endpoint(self, endpoint, **kwargs):
+        """ Adds an Endpoint Media Element to the pipeline
 
         Params:
             - endpoint (str): String representing the type of endpoint to create. Accepts:
@@ -67,7 +67,8 @@ class MediaPipeline(object):
             - kwargs: Optional named arguments for different endpoints:
                 - webrtc_recv_only (bool): Sets a WebRtcEndpoint to be a receiver only
                 - webrtc_send_only (bool): Sets a WebRtcEndpoint to be a sender only
-                - uri (str): Media URI for recorder & player endpoints only. 
+                - buffer_size (int): Milliseconds to buffer an RTSP stream in PlayerEndpoint
+                - uri (str): Media URI for RecorderEndpoint & PlayerEndpoint only. 
                     * For PlayerEndpoint, it's the media to be played
                         Accepted URI schemas are:
                             - file:///path/to/file (File on local file system)
@@ -85,7 +86,7 @@ class MediaPipeline(object):
         params = self.elem_params
         
 
-        excepted_kwargs = ["uri", "webrtc_recv_only", "webrtc_send_only"]
+        excepted_kwargs = ["uri", "webrtc_recv_only", "webrtc_send_only", "buffer_size"]
         uknowns = set(kwargs.keys() - excepted_kwargs)
         if(len(uknowns) > 0):
             raise KurentoOperationException(f"Unkown keyword arguments {uknowns} passed")
@@ -97,14 +98,21 @@ class MediaPipeline(object):
             uri = ''
         else:
             uri = kwargs["uri"]
+
         if("webrtc_recv_only" not in those_set):
             webrtc_recv_only = False
         else:
             webrtc_recv_only = kwargs["webrtc_recv_only"]
+
         if("webrtc_send_only" not in those_set):
             webrtc_send_only = False
         else:
             webrtc_send_only = kwargs["webrtc_send_only"]
+
+        if("buffer_size" not in those_set):
+            buffer_size = 500
+        else:
+            buffer_size = kwargs["buffer_size"]
 
 
         if(endpoint == "RecorderEndpoint" and uri == ''):
@@ -127,6 +135,7 @@ class MediaPipeline(object):
         elif(endpoint == "PlayerEndpoint"):
             params["type"] = "PlayerEndpoint"
             params["constructorParams"]["uri"] = uri
+            params["constructorParams"]["networkCache"] = buffer_size
             return self.__create_element(PlayerEndpoint, params)
 
         elif(endpoint == "RecorderEndpoint"):
@@ -199,8 +208,8 @@ class MediaPipeline(object):
 
         
 
-    def create_hub(self, hub, **kwargs):
-        """ Creates a Hub Media Element
+    def add_hub(self, hub, **kwargs):
+        """ Adds a Hub Media Element to the pipeline
 
         Params:
             - hub (str): String representing the type of hub to create. Accepts:
