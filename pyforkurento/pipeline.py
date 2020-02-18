@@ -17,7 +17,7 @@ from .hubs import DispatcherOneToMany
 from .exceptions import KurentoOperationException
 
 class MediaPipeline(object):
-    """ Base class for creating Media Elements
+    """ Base class for adding Media Elements to a Media Pipeline
     """
 
     def __init__(self, session_id, pipeline_id, client_class):
