@@ -110,7 +110,7 @@ class MediaPipeline(object):
             webrtc_send_only = kwargs["webrtc_send_only"]
 
         if("buffer_size" not in those_set):
-            buffer_size = 500
+            buffer_size = 250
         else:
             buffer_size = kwargs["buffer_size"]
 
@@ -160,6 +160,11 @@ class MediaPipeline(object):
             - kwargs: Optional named arguments for different endpoints:
                 - command (str): The gstreamer command (https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html)
                 - filter_type (str): The type of the gstreamer filter (AUDIO, VIDEO, or AUTODETECT)
+                    The textoverlay command DOES NOT work
+
+                    If a command in unrecognised, you might be missing a filter. Try:
+                        sudo apt install libgstreamer-plugins-bad1.0 libgstreamer-plugins-base1.0 libgstreamer-plugins-good1.0 libgstreamer-plugins-ugly1.0
+
 
         Returns:
             - Object of the requested filter
@@ -178,6 +183,8 @@ class MediaPipeline(object):
             command = "videobox fill=black top=20 bottom=20 left=-75 right=-75"
         else:
             command = kwargs["command"]
+            if("textoverlay" in command):
+                raise KurentoOperationException("Sorry. Kurento cannot work with textoverlay filters")
 
         if("filter_type" not in those_set):
             filter_type = "AUTODETECT"
