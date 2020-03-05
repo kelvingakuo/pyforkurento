@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name = "pyforkurento",
-    version = "0.1.6",
+    version = "0.1.7",
     description = "A Python client for Kurento Media Server",
     long_description = long_description,
     long_description_content_type = "text/markdown",
@@ -15,7 +15,7 @@ setuptools.setup(
     license = "MIT",
     packages = setuptools.find_packages(),
     install_requires = [
-      "websocket-client>=0.57.0"
+      "websocket-client==0.57.0"
     ],
     zip_safe = False
 )

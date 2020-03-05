@@ -55,7 +55,12 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 
 
 ## CHANGELOG <a id = "change"></a>
-*This changelog follows a loose version of semantic versioning*
+*This changelog loosely follows semantic versioning*
+### 0.1.7 5th Mar 2020
+**Improved**
+* Streaming speeds by reducing player endpoint latency
+
+
 ### 0.1.6 18th Feb 2020
 **Changed**
 * ```create_endpoint()``` to ```add_endpoint()```
