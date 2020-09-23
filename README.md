@@ -58,6 +58,7 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
 
 **Read the complete documentation here: https://pyforkurento.readthedocs.io/en/latest/**
 
+Run the recipes in the ```recipes/``` directory
 
 
 ## CHANGELOG <a id = "change"></a>
