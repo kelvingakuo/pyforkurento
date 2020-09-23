@@ -12,4 +12,4 @@ A set of Django recipes to test pyforkurento and Kurento Media Server
 ## Usage
 In each directory, you'll find a dir named _static_ , and ```manage.py``` at the same level.
 1. Find the ```html``` file inside ```static/``` then open it in a browser
-2. Do ```python manage.py runserver```. If the port is not 8000, change it in the ```html`` file
+2. Do ```python manage.py runserver```. If the port is not 8000, change it in the ```js``` file inside ```static/```
