@@ -23,7 +23,13 @@ For Node, Angular etc:
 npm install kurento-utils
 ```
 
-TODO: For vanilla Javascript:
+For vanilla Javascript:
+1. Install Node and NPM
+2. Install Bower
+3. Unpack Kurento-Utils using Bower. In any dir run:
+```bower install kurento-utils```
+
+Inside ```bower_components/kurento_utils/js``` find the file ```kurento-utils.min.js```. Copy it to your working area
 
 [Optional] To use GStreamer filters:
 ```bash
