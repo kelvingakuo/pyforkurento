@@ -104,3 +104,9 @@ sh kurento-module-scaffold.sh TestKMSFilter ../custom_kurento_module opencv_filt
         - Player Endpoints
         - WebRTC Endpoints
     - Subscribe to ICE candidates events on a WebRTC Endpoint
+
+## PLAN
+1. Implement better asynchronocity. Asyncio?
+2. Write tests
+3. Write recipes for various applications
+4. Release V1.0.0
