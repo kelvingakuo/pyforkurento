@@ -173,9 +173,7 @@ function stop()
 function uiStart()
 {
   console.log("[start] Create WebRtcPeerSendrecv");
-  uiSetState(UI_STARTING);
   rtspURL = document.getElementById('rtspURL').value;
-  console.log(rtspURL);
   sendMessage({
     id: 'rtspURL',
     payload: rtspURL,
