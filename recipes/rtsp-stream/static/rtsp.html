@@ -15,37 +15,43 @@
   <script src="/webjars/webrtc-adapter/release/adapter.js"></script>
 
   <!-- Kurento -->
-  <link rel="stylesheet" href="loopback.css">
+  <link rel="stylesheet" href="rtsp.css">
   <script src="kurento-utils.min.js"></script> <!-- JAR from Maven -->
-  <script src="loopback.js"></script>
+  <script src="rtsp.js"></script>
 
-  <title>KMS Loopback</title>
+  <title>KMS RTSP</title>
 </head>
 
 <body>
   <div class="container">
     <div class="page-header">
-      <h1><b>KMS WebRTC in loopback using pyforkurento</b></h1>
+      <h1><b>KMS RTSP to WebRTC using pyforkurento</b></h1>
       <p>
-        This web application shows a <i>WebRtcEndpoint</i> connected to itself
-        (loopback).
+        This web application shows an RTSP stream played on a browser using a <i>WebRtcEndpoint</i>
       </p>
       <p>
         To run this demo follow these steps:
       </p>
       <ol>
+        <li>Add an RTSP URL to the input box. Test with: 
+          <ul>
+          <li>rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov</li>
+          <li>rtsp://freja.hiof.no:1935/rtplive/_definst_/hessdalen02.stream</li>
+          <li>rtsp://freja.hiof.no:1935/rtplive/_definst_/hessdalen03.stream</li>
+          <li>rtsp://151.141.139.240/quickview</li>
+          <li>rtsp://170.93.143.139/rtplive/470011e600ef003a004ee33696235daa</li>
+          </ul>
+          ** You can confirm that the stream is working by playing it using VLC Media Player <br>
+          ** If using your own RTSP camera, make sure the KMS server, the camera, and this page are on the same network <b>or</b> read <a href = "https://doc-kurento.readthedocs.io/en/latest/knowledge/nat.html">this</a> to see how to connect them over different networks.
+        </li>  
         <li>Click on <i>Start</i> to begin the stream negotiation.</li>
-        <li>Grant access to the camera and microphone.</li>
         <li>Click on <i>Stop</i> to finish the test.</li>
         <li>Refresh the page to go again.</li>
       </ol>
     </div>
+    <input id = "rtspURL" class="form-control form-control-lg" type="text" value="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov">
+    <br>
     <div class="row">
-      <div class="col-md-5">
-        <h3><b>Local stream</b></h3>
-        <video id="uiLocalVideo" playsinline muted
-            width="480px" height="360px"></video>
-      </div>
       <div class="col-md-2">
         <a id="uiStartBtn" href="#" class="btn btn-success">
           <span class="glyphicon glyphicon-play"></span>Start</a>
@@ -55,7 +61,7 @@
           <span class="glyphicon glyphicon-stop"></span>Stop</a>
       </div>
       <div class="col-md-5">
-        <h3><b>Remote stream</b></h3>
+        <h3><b>RTSP stream</b></h3>
         <video id="uiRemoteVideo" playsinline
             width="480px" height="360px"></video>
       </div>

@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from pyforkurento import client
 
-class LoopbackConsumer(WebsocketConsumer):
+class RTSPStreamConsumer(WebsocketConsumer):
 	def connect(self):
 		self.accept()
 		self.cli = client.KurentoClient("ws://localhost:8888/kurento")
@@ -14,7 +14,6 @@ class LoopbackConsumer(WebsocketConsumer):
 			}))
 			self.pipeline = self.cli.create_media_pipeline()
 			self.rtc = self.pipeline.add_endpoint("WebRtcEndpoint")
-			self.rtc.connect()
 		except Exception as e:
 			self.send(text_data=json.dumps({
 				"id": "error",
@@ -30,11 +29,27 @@ class LoopbackConsumer(WebsocketConsumer):
    		 }))
 
 	def receive(self, text_data):
-
 		data = json.loads(text_data)
 		action = data["id"]
 
-		if(action == "processOffer"):
+		if(action == "rtspURL"):
+			rtsp_url = data["payload"]
+			try:
+				self.ply = self.pipeline.add_endpoint("PlayerEndpoint", uri = rtsp_url)
+				self.ply.connect(self.rtc)
+				self.ply.play()
+
+				self.send(text_data = json.dumps({
+					"id": "rtspConnection",
+					"payload": "PlayerEndpoint started"
+				}))
+			except Exception as e:
+				self.send(text_data = json.dumps({
+					"id": "rtspConnection",
+					"payload": f"PlayerEndpoint error occured -> {e}"
+				}))
+
+		elif(action == "processOffer"):
 			offer = data["payload"]
 			kms_sdp = self.rtc.process_offer(offer)
 
