@@ -2,6 +2,8 @@ A python client for Kurento Media Streamer
 
 **This SDK is not yet 'prod-ready'** and was inspired by [this abandoned project](https://github.com/minervaproject/pykurento)
 
+**This project is also now abandoned since 2020. Expect things to break. Feel free to fork and keep building**
+
 
 **Read the complete documentation here: https://pyforkurento.readthedocs.io/en/latest/**
 
